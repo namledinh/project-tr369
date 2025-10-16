@@ -131,7 +131,7 @@ jobs:
           -o main ./
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: usp-management-binary
         path: ./app/main
