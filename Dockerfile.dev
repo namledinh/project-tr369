@@ -1,0 +1,23 @@
+# Use the official Go image
+FROM golang:1.23.2-alpine3.19 AS development
+
+# Set working directory
+WORKDIR /app
+
+# Install air for hot reloading
+RUN go install github.com/cosmtrek/air@latest
+
+# Copy go mod files
+COPY ./app/go.mod ./app/go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy source code
+COPY ./app .
+
+# Expose port
+EXPOSE 8080
+
+# Command to run the application with hot reload
+CMD ["air", "-c", ".air.toml"]

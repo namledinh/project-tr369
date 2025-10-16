@@ -573,4 +573,237 @@ app/
 - Request/Response logging
 - Performance metrics
 - Error tracking
+# USP Management Device API
+
+[![CI Pipeline](https://github.com/namledinh/project-tr369/actions/workflows/ci.yml/badge.svg)](https://github.com/namledinh/project-tr369/actions/workflows/ci.yml)
+[![Security Scan](https://github.com/namledinh/project-tr369/actions/workflows/codeql.yml/badge.svg)](https://github.com/namledinh/project-tr369/actions/workflows/codeql.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/namledinh/project-tr369)](https://goreportcard.com/report/github.com/namledinh/project-tr369)
+[![Docker Image](https://ghcr.io/namledinh/project-tr369/badge.svg)](https://ghcr.io/namledinh/project-tr369)
+
+A Go-based API service for managing USP (User Services Platform) devices, built with Gin framework and PostgreSQL.
+
+## Features
+
+- **Device Management**: CRUD operations for USP devices
+- **Firmware Management**: Handle device firmware updates
+- **Group Management**: Organize devices into groups
+- **Parameter Management**: Manage device parameters and profiles
+- **File Export**: Export data to CSV format
+- **Health Monitoring**: Built-in health checks and metrics
+- **Authentication**: Secure API endpoints
+- **Logging**: Structured logging with multiple output formats
+
+## Tech Stack
+
+- **Language**: Go 1.23.2
+- **Framework**: Gin Web Framework
+- **Database**: PostgreSQL with GORM
+- **Cache**: Redis
+- **Message Queue**: Kafka
+- **Storage**: MinIO (S3-compatible)
+- **Monitoring**: Prometheus metrics
+- **Containerization**: Docker
+
+## Quick Start
+
+### Prerequisites
+
+- Go 1.23.2+
+- Docker & Docker Compose
+- PostgreSQL 15+
+- Redis
+- MinIO
+
+### Using Docker Compose
+
+```bash
+# Clone the repository
+git clone https://github.com/namledinh/project-tr369.git
+cd project-tr369
+
+# Start all services
+docker-compose up -d
+
+# Check service status
+docker-compose ps
+
+# View logs
+docker-compose logs -f app
+```
+
+### Local Development
+
+```bash
+# Clone the repository
+git clone https://github.com/namledinh/project-tr369.git
+cd project-tr369/app
+
+# Install dependencies
+go mod download
+
+# Copy environment file
+cp .envrc.example .envrc
+
+# Edit environment variables
+vim .envrc
+
+# Source environment
+source .envrc
+
+# Run the application
+go run main.go
+
+# Or use hot reload with Air
+air
+```
+
+## Configuration
+
+The application uses environment variables for configuration. See `.envrc.example` for all available options.
+
+### Key Environment Variables
+
+```bash
+# Database
+DATABASE_URL=postgres://user:password@localhost:5432/dbname
+
+# Redis
+REDIS_URL=redis://localhost:6379
+
+# MinIO
+MINIO_ENDPOINT=localhost:9000
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+
+# Server
+PORT=8080
+GIN_MODE=release
+```
+
+## API Documentation
+
+The API documentation is available at `/swagger/index.html` when running in development mode.
+
+### Main Endpoints
+
+- `GET /health` - Health check
+- `GET /metrics` - Prometheus metrics
+- `GET /api/v1/devices` - List devices
+- `POST /api/v1/devices` - Create device
+- `PUT /api/v1/devices/:id` - Update device
+- `DELETE /api/v1/devices/:id` - Delete device
+- `GET /api/v1/export/csv` - Export data to CSV
+
+## Development
+
+### Code Quality
+
+```bash
+# Run tests
+make test
+
+# Code formatting
+make fmt
+
+# Static analysis
+make vet
+
+# Security scan
+make security
+
+# Full audit
+make audit
+```
+
+### Building
+
+```bash
+# Build binary
+make build/api
+
+# Build Docker image
+docker build -t usp-management-api .
+
+# Build for multiple platforms
+make build/multi-arch
+```
+
+## Deployment
+
+### Using Docker
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/namledinh/project-tr369:latest
+
+# Run container
+docker run -p 8080:8080 \
+  -e DATABASE_URL="your-db-url" \
+  -e REDIS_URL="your-redis-url" \
+  ghcr.io/namledinh/project-tr369:latest
+```
+
+### Using Kubernetes
+
+```bash
+# Apply Kubernetes manifests
+kubectl apply -f k8s/
+
+# Check deployment status
+kubectl get pods -l app=usp-management-api
+```
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+- **CI Pipeline**: Runs tests, security scans, and builds on every push/PR
+- **Release Pipeline**: Creates releases and publishes Docker images on tags
+- **Security Scanning**: CodeQL and dependency vulnerability scanning
+- **Automated Updates**: Dependabot for dependency management
+
+### Workflows
+
+- `.github/workflows/ci.yml` - Main CI pipeline
+- `.github/workflows/release.yml` - Release automation  
+- `.github/workflows/codeql.yml` - Security analysis
+- `.github/workflows/dependency-review.yml` - Dependency security
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+Please read our [Contributing Guidelines](.github/CONTRIBUTING.md) for more details.
+
+## Security
+
+Please see our [Security Policy](.github/SECURITY.md) for information about reporting security vulnerabilities.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+For support and questions:
+
+- Create an issue on GitHub
+- Check the [documentation](docs/)
+- Review existing issues and discussions
+
+## Roadmap
+
+- [ ] GraphQL API support
+- [ ] WebSocket real-time updates  
+- [ ] Advanced device analytics
+- [ ] Multi-tenant support
+- [ ] Mobile app integration
+- [ ] Enhanced monitoring dashboard
+
+---
+
 # project-tr369
