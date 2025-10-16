@@ -1,0 +1,76 @@
+name: Simple CI
+
+on:
+  push:
+    branches: [ main, develop, g06-mysql ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  GO_VERSION: '1.23.2'
+
+jobs:
+  test:
+    name: Test and Build
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.GO_VERSION }}
+
+    - name: Cache Go modules
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/go-build
+          ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('app/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+
+    - name: Download dependencies
+      working-directory: ./app
+      run: go mod download
+
+    - name: Verify dependencies
+      working-directory: ./app
+      run: go mod verify
+
+    - name: Format check
+      working-directory: ./app
+      run: |
+        if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+          echo "Code is not formatted properly"
+          gofmt -s -l .
+          exit 1
+        fi
+
+    - name: Vet
+      working-directory: ./app
+      run: go vet ./...
+
+    - name: Build
+      working-directory: ./app
+      run: |
+        current_time=$(date --iso-8601=seconds)
+        git_description=$(git describe --always --dirty --tags --long)
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
+          -ldflags "-s -X main.buildTime=$current_time -X main.version=$git_description" \
+          -o main ./
+
+    - name: Basic security scan
+      working-directory: ./app
+      run: |
+        go install github.com/securecodewarrior/gosec/v2/cmd/gosec@latest
+        gosec -fmt json -out gosec-report.json -stdout ./... || true
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: usp-management-binary
+        path: ./app/main
