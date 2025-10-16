@@ -11,7 +11,7 @@ RUN current_time=$(date +"%Y-%m-%dT%H:%M:%SZ") && \
     CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s -X main.buildTime=$current_time -X main.version=$GIT_VERSION" -o /out/main ./
 
 # image stage
-FROM alpine:3.19
+FROM alpine:3.22
 
 RUN apk --no-cache add curl
 
