@@ -1,0 +1,28 @@
+networks:
+  usp-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+services:
+  usp-management-backend:
+    build: .
+    container_name: usp-management-backend
+    image: usp-management-backend:latest
+    ports:
+      - "8080:8080"
+    env_file: .env.staging
+    environment:
+      - APP_NAME=usp-management-backend
+      - APP_PORT=8080
+      - APP_LOG_LEVEL=debug
+      - SQL_HOST=172.19.130.17
+      - SQL_PORT=26257
+      - SQL_USP_DB=usp_system
+      - MINIO_ENDPOINT=s3-api.dc11.inf.fpt.net
+      - MINIO_ACCESS_KEY=1b8xAQl4JRXixJoXgmQ
+      - MINIO_SECRET_KEY=RqiQUNFOKUtNMiuvQkD9F3j7Sc6uG57wFmtduBAt
+    restart: unless-stopped
+    networks:
+      - usp-network

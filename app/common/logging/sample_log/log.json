@@ -1,0 +1,14 @@
+{
+    "service_src": "http-configure-backend",
+    "mac_address": "000000000000",
+    "event_uuid": "00000000-0000-0000-0000-000000000000",
+    "original": "hifpt_group_acl",
+    "topic": "public.hifpt.prod.cpe.configure.v1",
+    "method": "GET",
+    "action": "/api/v1/health",
+    "http_code": 200,
+    "status_key": "success",
+    "message": "Request is successful",
+    "response" :{},
+    "request": {}
+}
