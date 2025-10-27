@@ -70,7 +70,7 @@ jobs:
         gosec -fmt json -out gosec-report.json -stdout ./... || true
         
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: usp-management-binary
         path: ./app/main
